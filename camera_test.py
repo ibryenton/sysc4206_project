@@ -21,7 +21,7 @@ def main():
     # load the furst image that contains an object that is KNOWN TO BE 2 feet
     # from our camera, then find the paper marker in the image, and initialize
     # the focal length
-    image = cv2.imread("images/2ft2.png")
+    image = cv2.imread("./images/img2.jpg")
     marker = find_marker(image)
     focalLength = (marker[1][0] * KNOWN_DISTANCE) / KNOWN_WIDTH
     print(marker)
@@ -76,10 +76,11 @@ def find_circle(image):
             # circle outline
             radius = i[2]
             cv2.circle(image, center, radius, (255, 0, 255), 3)
-
+    #check_colour(image, center[0], center[1])
     cv2.imshow("detected circles", image)
     cv2.waitKey(0)
-
+def check_colour(image, x, y):
+     print(image[x, y])
 
 def distance_to_camera(knownWidth, focalLength, perWidth):
 	# compute and return the distance from the maker to the camera
