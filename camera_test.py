@@ -62,11 +62,13 @@ def find_marker(image):
 
 def find_circle(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    gray=cv2.medianBlur(gray,5)
+    #gray=cv2.medianBlur(gray,5)
+    gray = cv2.GaussianBlur(gray, (5, 5), 0)
+    cv2.imshow("gray", gray)
     rows = gray.shape[0]
     circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1, rows / 8,
                                param1=100, param2=30,
-                               minRadius=1, maxRadius=80)
+                               minRadius=20, maxRadius=80)
     if circles is not None:
         circles = np.uint16(np.around(circles))
         for i in circles[0, :]:
