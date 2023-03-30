@@ -6,25 +6,28 @@ from imutils import paths
 import numpy as np
 import imutils
 import cv2
-
-
+from red_circle import get_radius
 def main():
     """
     <Main Description>
     """
     # initialize the known distance from the camera to the object, which
     # in this case is 24 inches
-    KNOWN_DISTANCE = 21.650
+    KNOWN_DISTANCE = 6
+
     # initialize the known object width, which in this case, the piece of
     # paper is 12 inches wide
-    KNOWN_WIDTH = 11
+    KNOWN_WIDTH = 0.5
     # load the furst image that contains an object that is KNOWN TO BE 2 feet
     # from our camera, then find the paper marker in the image, and initialize
     # the focal length
-    image = cv2.imread("./images/img2.jpg")
+    image = cv2.imread("images/2ft2.png")
     marker = find_marker(image)
     focalLength = (marker[1][0] * KNOWN_DISTANCE) / KNOWN_WIDTH
     print(marker)
+    circle_radius = get_radius()
+    circle_distance = distance_to_camera(KNOWN_WIDTH, focalLength, circle_radius)
+    print(circle_distance)
     # loop over the images
     for imagePath in sorted(paths.list_images("images")):
         # load the image, find the marker in the image, then compute the
@@ -78,11 +81,10 @@ def find_circle(image):
             # circle outline
             radius = i[2]
             cv2.circle(image, center, radius, (255, 0, 255), 3)
-    #check_colour(image, center[0], center[1])
+
     cv2.imshow("detected circles", image)
     cv2.waitKey(0)
-def check_colour(image, x, y):
-     print(image[x, y])
+
 
 def distance_to_camera(knownWidth, focalLength, perWidth):
 	# compute and return the distance from the maker to the camera
