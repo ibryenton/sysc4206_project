@@ -3,12 +3,14 @@
 Test script which interfaces with meca500 to navigate to red circle
 """
 
-import pymeca
+import mecademicpy.robot as mdr
 import cv2
 import numpy as np
 
 # Initialize robot connection
-robot = pymeca.Meca500('192.168.0.100')
+robot = mdr.Robot()
+robot.Connect(address='192.168.0.100', enable_synchronous_mode=True)
+robot.ActivateAndHome()
 
 # Initialize camera
 camera = cv2.VideoCapture(0)
@@ -59,6 +61,7 @@ while True:
 
             # Move the robot to the object
             robot.move([object_distance_mm, 0, 0, 0, 0, 0], 'absolute')
+            robot.MoveJoints(0, 0, 0, 0, 0, 0)
 
             # Draw a circle around the object
             cv2.drawContours(frame, [cnt], -1, (0, 255, 0), 2)
