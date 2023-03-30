@@ -7,16 +7,12 @@ import mecademicpy.robot as mdr
 import cv2
 import numpy as np
 
-# Initialize robot connection
-robot = mdr.Robot()
-robot.Connect(address='192.168.0.100', enable_synchronous_mode=True)
-robot.ActivateAndHome()
 
 # Initialize camera
-camera = cv2.VideoCapture(0)
-
+camera = cv2.VideoCapture(1)
+print(camera)
 # Set camera parameters
-camera_focal_length = 2.8 # mm
+camera_focal_length = 1 # mm
 camera_sensor_width = 5.7 # mm
 camera_pixel_size = 0.0014 # mm
 
@@ -53,15 +49,12 @@ while True:
 
         # Check if the color at the center of the contour matches the target color
         color = frame[cy, cx]
-        if tuple(color) == target_color:
+        if color[0] >= 200:
             # Compute the distance to the object
             object_width_px = cv2.minEnclosingCircle(cnt)[1][0] * 2
             object_width_mm = object_width_px * camera_pixel_size
             object_distance_mm = (camera_focal_length * robot_distance) / (object_width_mm * camera_sensor_width)
 
-            # Move the robot to the object
-            robot.move([object_distance_mm, 0, 0, 0, 0, 0], 'absolute')
-            robot.MoveJoints(0, 0, 0, 0, 0, 0)
 
             # Draw a circle around the object
             cv2.drawContours(frame, [cnt], -1, (0, 255, 0), 2)
