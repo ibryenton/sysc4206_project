@@ -3,8 +3,7 @@
 <Module Description>
 """
 import numpy as np
-from rich import print
-from rich.traceback import install; install()
+
 import mecademicpy.robot as mdr
 
 class Meca():
@@ -21,10 +20,10 @@ class Meca():
         self.robot.ActivateAndHome()
         self.robot.SetJointVel(10)
         self.robot.MoveJoints(0, 0, 0, 0, 0, 0)
-        self.robot.MoveJoints(0, -60, 60, 0, 0, 0)
+        #self.robot.MoveJoints(0, -60, 60, 0, 0, 0)
 
     # The returned robot position will be (0, -60, 60, 0, 0, 0), because this line will only be executed once MoveJoints(0, -60, 60, 0, 0, 0) has completed.
-        print(self.robot.GetJoints())
+        #print(self.robot.GetJoints())
 
     def deactivate(self):
         """
@@ -39,7 +38,7 @@ class Meca():
 
     def meca_coordinates(self, px, py, pz):
         # Pc is the vector which defines the BRF to the CRF
-        Pc = [0, 320, 450, 1]
+        Pc = [0, 320, 420, 1]
         P = [px, py, pz, 1]
 
         H = [[0, 1, 0, Pc[0]],

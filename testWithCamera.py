@@ -9,8 +9,8 @@ install()
 
 def main():
     camera = cv2.VideoCapture(0)
-    meca = Meca()
-
+    #meca = Meca()
+    out = cv2.VideoWriter('output.mp4', -1, 20.0, (640,480))
     while True:
         # Capture frame from camera
         ret, frame = camera.read()
@@ -67,14 +67,19 @@ def main():
 
             # Print the distance
             print(f"Distance: {distance:.2f} mm")
+            distanceStr = f"Distance: {distance:.2f} mm, x: {d_cx:.2f} mm"
+            distanceStr2 = f"y: {d_cy:.2f} mm"
+            cv2.putText(frame, distanceStr, (0, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255),1,cv2.LINE_AA)
+            cv2.putText(frame, distanceStr2, (0, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255),1,cv2.LINE_AA)
+
             cv2.imshow('frame', frame)
             cv2.imwrite('frame.jpg', frame)
-            mx, my, mz, _ = meca.meca_coordinates(d_cx, d_cy, distance)
-            meca.robot.MovePose(mx, my, mz, 0, 90, 0)
+            #mx, my, mz, _ = meca.meca_coordinates(d_cx, d_cy, distance)
+            #meca.robot.MovePose(mx, my, mz, 0, 90, 0)
             #meca.get_joints()
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
+        out.write(frame)
 
 if __name__ == '__main__':
     main()
