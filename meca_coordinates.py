@@ -34,7 +34,7 @@ class Meca():
         robot.Disconnect()
 
     def print_connected(self):
-        print('[bold aquamarine1] connected')
+        print(f'[bold aquamarine1] connected')
 
 
     def meca_coordinates(self, px, py, pz):
