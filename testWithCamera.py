@@ -75,7 +75,9 @@ def main():
 
             # Get coordinates from CRF in BRF
             mx, my, mz, _ = meca.meca_coordinates(d_cx, d_cy, distance)
+            # Send robot to incision coordinates
             meca.robot.MovePose(mx, my, mz, 180, 8, 180)
+            # Send robot back home to avoid robot harm hindering identification of marker
             meca.robot.MoveJoints(0,0,0,0,0,0)
             meca.get_joints()
 
