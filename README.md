@@ -1,6 +1,5 @@
 # SYSC 4206 Final Project
 
-Status: No
 
 This repository contains the files used for the SYSC4206 Final design project aimed to implement a lactate testing protocol utilizing surgical robotics and video recognition.
 
