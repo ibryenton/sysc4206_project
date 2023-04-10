@@ -2,14 +2,15 @@
 import cv2
 import numpy as np
 from rich.traceback import install
-from meca_coordinates import Meca
+from meca import Meca
 
 install()
 # Initialize camera
 
 def main():
     camera = cv2.VideoCapture(0)
-    meca = Meca()
+    out = cv2.VideoWriter('output.avi', -1, 20.0, (640,480))
+    #meca = Meca()
 
     while True:
         # Capture frame from camera
@@ -55,23 +56,29 @@ def main():
             cv2.circle(frame, (cx, cy), 5, (0, 0, 255), -1)
 
             # Calculate distance from camera
-            focal_length = 500  # iPhone X focal length in mm
-            actual_diameter = 15  # actual diameter of the red circle in mm
+            focal_length = 500  # focal length in mm
+            actual_diameter = 20  # actual diameter of the red circle in mm
             pixel_diameter = max_radius*2  # diameter of the red circle in pixels
-            print(pixel_diameter)
             distance = (actual_diameter * focal_length) / pixel_diameter
             d_cx = (25/62)*((1980/2)-cx)
             d_cy = (25/62)*((1080/2)-cy)
-            print(f'[bold red] x: in p{cx} {d_cx} y:{cy} {d_cy}')
+            print(f'[bold red] x: in p{cx} {d_cx} y:{cy} {d_cy}, diameter:{diameter}')
 
 
             # Print the distance
             print(f"Distance: {distance:.2f} mm")
+            cv2.putText(frame, f"{distance:.2f}",
+                (frame.shape[1] - 200, frame.shape[0] - 20), cv2.FONT_HERSHEY_SIMPLEX,
+            2.0, (0, 255, 0), 3)
             cv2.imshow('frame', frame)
             cv2.imwrite('frame.jpg', frame)
+
+            # Get coordinates from CRF in BRF
             mx, my, mz, _ = meca.meca_coordinates(d_cx, d_cy, distance)
-            meca.robot.MovePose(mx, my, mz, 0, 90, 0)
-            #meca.get_joints()
+            meca.robot.MovePose(mx, my, mz, 180, 8, 180)
+            meca.robot.MoveJoints(0,0,0,0,0,0)
+            meca.get_joints()
+
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 

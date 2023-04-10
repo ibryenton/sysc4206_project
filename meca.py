@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 """
-<Module Description>
+Script which creates a Meca Robot object and uses Mecademic Python API
+
+MecademicPy Github : https://github.com/Mecademic/mecademicpy
+To install: 'pip install mecademicpy'
 """
 import numpy as np
 from rich import print
@@ -9,7 +12,12 @@ import mecademicpy.robot as mdr
 
 class Meca():
     """
-    Test function which interfaces with mecademic robot
+    Function which interfaces with mecademic robot
+
+    Any functions from the MecaProgramming manual can be used on the Meca.robot object
+    Ex:
+        Meca.robot.MoveJoints(0,0,0,0,0,0)
+        Meca.robot,MoveLin(x,y,z,a,b,g)
     """
     def __init__(self):
         self.robot = mdr.Robot()
@@ -22,20 +30,18 @@ class Meca():
         self.robot.ActivateAndHome()
         self.robot.SetJointVel(10)
         self.robot.MoveJoints(0, 0, 0, 0, 0, 0)
-
-    # The returned robot position will be (0, -60, 60, 0, 0, 0), because this line will only be executed once MoveJoints(0, -60, 60, 0, 0, 0) has completed.
         print(self.robot.GetJoints())
 
     def deactivate(self):
         """
         Deactivate and Disconnect from Meca500
         """
-        robot.DeactivateRobot()
-        robot.Disconnect()
+        self.robot.WaitIdle()
+        self.robot.DeactivateRobot()
+        self.robot.Disconnect()
 
     def print_connected(self):
         return print(f'[bold aquamarine1] connected')
-
 
     def meca_coordinates(self, px, py, pz):
         """
